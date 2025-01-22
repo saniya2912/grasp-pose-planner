@@ -2,7 +2,7 @@ import mujoco
 import mujoco.viewer
 
 
-model = mujoco.MjModel.from_xml_path('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/leaphand.xml')
+model = mujoco.MjModel.from_xml_path('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/index_for_ik.xml')
 data = mujoco.MjData(model)
 
 
