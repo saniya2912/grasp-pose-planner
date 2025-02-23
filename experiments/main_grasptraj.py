@@ -52,13 +52,13 @@ class LeapNode_Poscontrol:
     def __init__(self):
         ####Some parameters
         # self.ema_amount = float(rospy.get_param('/leaphand_node/ema', '1.0')) #take only current
-        self.kP = 250
+        self.kP = 500
         self.kI = 0
         self.kD = 25
         self.kP_slow = 300
         self.kI = 0
         self.kD = 200
-        self.curr_lim = 350
+        self.curr_lim = 1000
         self.prev_pos = self.pos = self.curr_pos = lhu.allegro_to_LEAPhand(np.zeros(16))
         self.motors = motors = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
         self.dxl_client=init_ins.dxl_client

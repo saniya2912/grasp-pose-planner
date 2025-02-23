@@ -34,6 +34,7 @@
     <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
     <geom type="box" size="0.03 0.08 0.03" material="box"/>
     <site pos="0.02 0 0" name="obj_contact_1"/>
+    <site pos="0.0 -0.04 0" name="obj_contact_mid"/>
     <site pos="-0.02 0 0" name="obj_contact_2"/>
     <!-- <joint name="box" type="fixed"/> -->
         </body>

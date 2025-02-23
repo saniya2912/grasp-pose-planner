@@ -9,7 +9,7 @@ import numpy as np
 #single object
 leap_hand = LeapNode_Poscontrol()
 pos=leap_hand.read_pos()
-print('real_pos',pos)
+
 
 
 # Load the model
@@ -22,6 +22,9 @@ ringik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/ring_for_ik.xml
 thumbik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/thumb_for_ik.xml')
 
 grasppose=GraspPose()
+
+
+#############################
 site1_name='1_4'
 site2_name='4_3'
 
@@ -31,25 +34,149 @@ mujoco.mj_step(model, data)
 contact_1=data.site(model.site('obj_contact_1').id).xpos.reshape(3) 
 contact_2=data.site(model.site('obj_contact_2').id).xpos.reshape(3) 
 
+
 finger1str,finger2str=grasppose.ik_name(site1_name,site2_name)
 
 finger1ik = globals().get(finger1str, None)
 finger2ik = globals().get(finger2str, None)
 
 # Calculate joint angles to reach the target
-q1 = finger1ik.calculate(contact_1, site1_name)
-q2= finger2ik.calculate(contact_2, site2_name)
+q1_step1 = finger1ik.calculate(contact_1, site1_name)
+q2_step1= finger2ik.calculate(contact_2, site2_name)
 
-q_mujoco=grasppose.joint_angles(site1_name,site2_name,q1,q2)
-print('q_mujoco', q_mujoco)
+q_mujoco1=grasppose.joint_angles(site1_name,site2_name,q1_step1,q2_step1)
 
-q_real = q_mujoco
-q_real[0], q_real[1] = q_real[1], q_real[0]
 
-print('q_real', q_real)
+q_real1 = q_mujoco1
+q_real1[0], q_real1[1] = q_real1[1], q_real1[0]
+
+##################################
+site1_name='2_3'
+site2_name='4_3'
+
+mujoco.mj_step(model, data)
+
+# Set a target position (example)
+contact_1=data.site(model.site('obj_contact_mid').id).xpos.reshape(3) 
+contact_2=data.site(model.site('obj_contact_2').id).xpos.reshape(3) 
+
+
+finger1str,finger2str=grasppose.ik_name(site1_name,site2_name)
+
+finger1ik = globals().get(finger1str, None)
+finger2ik = globals().get(finger2str, None)
+
+# Calculate joint angles to reach the target
+q1_step2 = finger1ik.calculate(contact_1, site1_name)
+q2_step2= finger2ik.calculate(contact_2, site2_name)
+
+q_mujoco2=grasppose.joint_angles(site1_name ,site2_name,q1_step2,q2_step2)
+
+
+q_real2 = q_mujoco2
+q_real2[0:4] = q_real1[0:4]
+q_real2[4], q_real2[5] = q_real2[5], q_real2[4]
+
+#########################################
+
+site1_name='1_2'
+site2_name='4_3'
+
+mujoco.mj_step(model, data)
+
+# Set a target position (example)
+contact_1=data.site(model.site('obj_contact_1').id).xpos.reshape(3) 
+contact_2=data.site(model.site('obj_contact_2').id).xpos.reshape(3) 
+
+
+finger1str,finger2str=grasppose.ik_name(site1_name,site2_name)
+
+finger1ik = globals().get(finger1str, None)
+finger2ik = globals().get(finger2str, None)
+
+# Calculate joint angles to reach the target
+q1_step4 = finger1ik.calculate(contact_1, site1_name)
+q2_step4= finger2ik.calculate(contact_2, site2_name)
+
+q_mujoco4=grasppose.joint_angles(site1_name,site2_name,q1_step4,q2_step4)
+
+
+q_real4 = q_mujoco4
+q_real4[0], q_real4[1] = q_real4[1], q_real4[0]
+
+################################
+site1_name='2_3'
+site2_name='4_3'
+
+mujoco.mj_step(model, data)
+
+# Set a target position (example)
+contact_1=data.site(model.site('obj_contact_mid').id).xpos.reshape(3) 
+contact_2=data.site(model.site('obj_contact_2').id).xpos.reshape(3) 
+
+
+finger1str,finger2str=grasppose.ik_name(site1_name,site2_name)
+
+finger1ik = globals().get(finger1str, None)
+finger2ik = globals().get(finger2str, None)
+
+# Calculate joint angles to reach the target
+q1_step6 = finger1ik.calculate(contact_1, site1_name)
+q2_step6= finger2ik.calculate(contact_2, site2_name)
+
+q_mujoco6=grasppose.joint_angles(site1_name ,site2_name,q1_step6,q2_step6)
+
+q_real6 = q_mujoco6
+q_real6[0:4] = q_real6[0:4]
+
+
+# q_real2 = q_mujoco2
+# q_real2[0:4] = q_real1[0:4]
+# q_real2[4], q_real2[5] = q_real2[5], q_real2[4]
+
+
+start_time = time.time()
+
+while time.time()-start_time>0 and time.time()-start_time<5:
+    leap_hand.set_allegro(q_real1)
+
+while time.time()-start_time>5 and time.time()-start_time<6:
+    leap_hand.set_allegro(q_real2)
+
+while time.time()-start_time>6 and time.time()-start_time<7:
+    q_real3=q_real2
+    q_real3[0:4]=[0,0,0,0]
+    leap_hand.set_allegro(q_real3)
+
+while time.time()-start_time>7 and time.time()-start_time<8:
+    q_real4[4:8]=q_real3[4:8]
+    # q_real3[0:4]=[0,0,0,0]
+    leap_hand.set_allegro(q_real4)
+
+while time.time()-start_time>8 and time.time()-start_time<9:
+    q_real5=q_real4
+    q_real5[4:8]=[0,0,0,0]
+    leap_hand.set_allegro(q_real5)
+
+while time.time()-start_time>9 and time.time()-start_time<10:
+    q_real2[0:4]=q_real5[0:4]
+    leap_hand.set_allegro(q_real2)
+
+while time.time()-start_time>10 and time.time()-start_time<11:
+    q_real2[0:4]=[0,0,0,0]
+    leap_hand.set_allegro(q_real2)
 
 while True:
-    leap_hand.set_allegro(q_real)
+    leap_hand.set_allegro([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+
+# while True:
+#     leap_hand.set_allegro([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+# while time.time()-start_time>6 and time.time()-start_time<8:
+#     q_real4[0:4]=q_real3[0:4]
+#     # q_real3[0:4]=[0,0,0,0]
+#     leap_hand.set_allegro(q_real4)
 
 
 
