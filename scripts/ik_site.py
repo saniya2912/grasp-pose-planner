@@ -4,13 +4,13 @@ import numpy as np
 from main import OnlyPosIK,GraspPose
 
 # Load the model
-model = mujoco.MjModel.from_xml_path('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/leaphand.xml')
+model = mujoco.MjModel.from_xml_path('/home/saniya/Projects/grasp-pose-planner/model/leaphand.xml')
 data = mujoco.MjData(model)
 
-indexik=OnlyPosIK('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/index_for_ik.xml')
-middleik=OnlyPosIK('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/middle_for_ik.xml')
-ringik=OnlyPosIK('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/ring_for_ik.xml')
-thumbik=OnlyPosIK('/home/iitgn-robotics/Saniya/grasp-pose-planner/model/thumb_for_ik.xml')
+indexik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/index_for_ik.xml')
+middleik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/middle_for_ik.xml')
+ringik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/ring_for_ik.xml')
+thumbik=OnlyPosIK('/home/saniya/Projects/grasp-pose-planner/model/thumb_for_ik.xml')
 
 grasppose=GraspPose()
 site1_name='1_4'
