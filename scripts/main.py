@@ -50,6 +50,9 @@ class OnlyPosIK:
         result = self.data.qpos.copy()
         return result
     
+    def calc_jac(self,site_name):
+        J1=mujoco.mj_JacSite()
+    
 class GraspPose:
     def __init__(self):
         pass
@@ -67,6 +70,24 @@ class GraspPose:
 
         return finger1_name, finger2_name
 
+    def ik_name(self, site_name1, site_name2):
+        # Use find_finger to get the finger names
+        finger1_name, finger2_name = self.find_finger(site_name1, site_name2)
+        
+        # Map the finger names to their corresponding IK names
+        ik_mapping = {
+            'index': 'indexik',
+            'middle': 'middleik',
+            'ring': 'ringik',
+            'thumb': 'thumbik'
+        }
+
+        # Get the IK names for each finger
+        finger1_ik = ik_mapping.get(finger1_name, None)
+        finger2_ik = ik_mapping.get(finger2_name, None)
+
+        return finger1_ik, finger2_ik
+    
     def ik_name(self, site_name1, site_name2):
         # Use find_finger to get the finger names
         finger1_name, finger2_name = self.find_finger(site_name1, site_name2)
@@ -118,4 +139,4 @@ class GraspPose:
         q = np.hstack([q_index, q_middle, q_ring, q_thumb])
         print(q)
         return np.array(q)
-
+    
